@@ -3,10 +3,12 @@ alias NodeFinder.NodeInfo, as: NodeInfo
 defmodule NodeFinder.SignalReceiver do
   use GenServer.Behaviour
 
+  # Public API
   def start_link do
     :gen_server.start_link(__MODULE__, [], [])
   end
 
+  # Callbacks
   def init([]) do
     { :ok, addr } = :application.get_env :udp_multicast_address
     { :ok, port } = :application.get_env :udp_multicast_port

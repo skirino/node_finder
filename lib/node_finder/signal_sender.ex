@@ -3,15 +3,23 @@ alias NodeFinder.NodeInfo, as: NodeInfo
 defmodule NodeFinder.SignalSender do
   use GenServer.Behaviour
 
+  # Public API
   def start_link do
-    :gen_server.start_link(__MODULE__, [], [])
+    :gen_server.start_link({ :local, :node_finder_signal_sender }, __MODULE__, [], [])
   end
 
+  def send do
+    :node_finder_signal_sender <- :send
+    :ok
+  end
+
+  # Callbacks
   def init([]) do
     { :ok, :erlang.send_after(1, self, :send) }
   end
 
-  def handle_info(:send, _old_timer) do
+  def handle_info(:send, old_timer) do
+    :erlang.cancel_timer(old_timer)
     send_signal
     { :ok, millis } = :application.get_env :sending_interval_milliseconds
     { :noreply, :erlang.send_after(millis, self, :send) }
