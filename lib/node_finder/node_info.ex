@@ -1,16 +1,21 @@
 defmodule NodeFinder.NodeInfo do
   def encode do
     node_str = atom_to_binary(node)
-    message = <<now_seconds::64, node_str::binary>>
-    <<calc_hmac(message)::binary, message::binary>>
+    message = "node_finder" <> <<now_seconds::64, node_str::binary>>
+    encrypt(message)
   end
 
   def decode(bin) do
-    <<hash::[size(20), binary], t::64, node_str::binary>> = bin
-    if calc_hmac(<<t::64, node_str::binary>>) == hash && within_allowed_time_window(t) do
-      { :ok, node_str }
-    else
-      { :error, "Failed to decode NodeInfo!" }
+    state = :crypto.stream_init(:rc4, encryption_key)
+    { _state, plain_str } = :crypto.stream_decrypt(state, bin)
+    case plain_str do
+      <<"node_finder", now_seconds::64, node_str::binary>> ->
+        if within_allowed_time_window(now_seconds) do
+          { :ok, node_str }
+        else
+          { :error, "NodeInfo already expired." }
+        end
+      _ -> { :error, "Failed to decode received NodeInfo." }
     end
   end
 
@@ -21,13 +26,18 @@ defmodule NodeFinder.NodeInfo do
     abs(now_seconds - t) < 300
   end
 
-  defp calc_hmac(message) do
-    :crypto.hmac(:sha, hmac_key, message)
+  defp encrypt(plain) do
+    { _new_state, cipher_str } = :crypto.stream_encrypt(encryption_initial_state, plain)
+    cipher_str
   end
-  defp hmac_key do
-    atom_to_binary(Node.get_cookie) <> hmac_salt
+  defp decrypt(encrypted) do
+    { _new_state, plain_str } = :crypto.stream_decrypt(encryption_initial_state, encrypted)
+    plain_str
   end
-  defp hmac_salt do
-    "3c7c4940b6"
+  defp encryption_initial_state do
+    :crypto.stream_init(:rc4, encryption_key)
+  end
+  defp encryption_key do
+    atom_to_binary(Node.get_cookie) <> "3c7c4940b6"
   end
 end
