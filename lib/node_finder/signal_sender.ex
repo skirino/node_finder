@@ -8,15 +8,13 @@ defmodule NodeFinder.SignalSender do
   end
 
   def init([]) do
-    { :ok, t } = :timer.send_after(1, self, :send)
-    { :ok, t }
+    { :ok, :erlang.send_after(1, self, :send) }
   end
 
   def handle_info(:send, _old_timer) do
     send_signal
     { :ok, millis } = :application.get_env :sending_interval_milliseconds
-    { :ok, t } = :timer.send_after(millis, self, :send)
-    { :noreply, t }
+    { :noreply, :erlang.send_after(millis, self, :send) }
   end
 
   defp send_signal do
