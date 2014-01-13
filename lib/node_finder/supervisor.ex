@@ -7,8 +7,9 @@ defmodule NodeFinder.Supervisor do
 
   def init([]) do
     children = Enum.filter([
-        child_worker(:send_signal,    NodeFinder.SignalSender),
-        child_worker(:receive_signal, NodeFinder.SignalReceiver),
+        child_worker(:send_signal,      NodeFinder.SignalSender),
+        child_worker(:receive_signal,   NodeFinder.SignalReceiver),
+        child_worker(:watch_connection, NodeFinder.ConnectionWatcher),
       ], fn(w) -> w end)
     supervise(children, strategy: :one_for_one)
   end

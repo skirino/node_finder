@@ -4,6 +4,7 @@ defmodule NodeFinder do
   def start(_type, _args) do
     override_env :send_signal
     override_env :receive_signal
+    override_env :watch_connection
     override_env :udp_multicast_address
     override_env :udp_multicast_port
     override_env :sending_interval_milliseconds
