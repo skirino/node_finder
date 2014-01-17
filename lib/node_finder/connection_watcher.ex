@@ -16,7 +16,7 @@ defmodule NodeFinder.ConnectionWatcher do
   # Callbacks
   def init([]) do
     :net_kernel.monitor_nodes(true, [node_type: :all])
-    { :ok, [nodeup: [], nodedown: []] }
+    { :ok, [nodeup: [&nodeup_printer/1], nodedown: [&nodedown_printer/1]] }
   end
 
   def handle_info({ :add_handler, key, f }, state) do
@@ -25,7 +25,14 @@ defmodule NodeFinder.ConnectionWatcher do
   end
   def handle_info({ key, node, _infos }, state) do
     handlers = Keyword.get(state, key, [])
-    Enum.each(handlers, fn(f) -> f.(key, node) end)
+    Enum.each(handlers, fn(f) -> f.(node) end)
     { :noreply, state }
+  end
+
+  def nodeup_printer(node) do
+    :error_logger.info_msg "nodeup: #{node}\n"
+  end
+  def nodedown_printer(node) do
+    :error_logger.info_msg "nodedown: #{node}\n"
   end
 end
