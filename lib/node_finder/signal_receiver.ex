@@ -34,9 +34,9 @@ defmodule NodeFinder.SignalReceiver do
 
   defp connect_if_not_yet(node) do
     if node != Node.self && !Enum.member?(Node.list, node) do
-      :error_logger.info_msg "Trying to connect to '#{node}'...\n"
+      :error_logger.info_msg "[#{__MODULE__}] Trying to connect to '#{node}'..."
       if !Node.connect(node) do
-        :error_logger.info_msg "Failed to establish connection to '#{node}'.\n"
+        :error_logger.info_msg "[#{__MODULE__}] Failed to establish connection to '#{node}'."
       end
     end
   end

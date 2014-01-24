@@ -26,7 +26,7 @@ defmodule NodeFinder.SignalSender do
   end
 
   defp send_signal do
-    :error_logger.info_msg "Sending node info...\n"
+    :error_logger.info_msg "[#{__MODULE__}] Number of connected nodes: #{Enum.count Node.list}. Sending node info..."
     { :ok, addr } = :application.get_env :udp_multicast_address
     { :ok, port } = :application.get_env :udp_multicast_port
     { :ok, socket } = :gen_udp.open(0, [active: true, multicast_loop: true])

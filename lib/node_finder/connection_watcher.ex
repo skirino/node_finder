@@ -30,9 +30,9 @@ defmodule NodeFinder.ConnectionWatcher do
   end
 
   def nodeup_printer(node) do
-    :error_logger.info_msg "nodeup: #{node}\n"
+    :error_logger.info_msg "[#{__MODULE__}] nodeup: #{node}"
   end
   def nodedown_printer(node) do
-    :error_logger.info_msg "nodedown: #{node}\n"
+    :error_logger.info_msg "[#{__MODULE__}] nodedown: #{node}"
   end
 end
