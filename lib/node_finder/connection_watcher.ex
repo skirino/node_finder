@@ -7,10 +7,10 @@ defmodule NodeFinder.ConnectionWatcher do
   end
 
   def add_nodeup_handler(f) do
-    :node_finder_connection_watcher <- { :add_handler, :nodeup, f }
+    send :node_finder_connection_watcher, { :add_handler, :nodeup, f }
   end
   def add_nodedown_handler(f) do
-    :node_finder_connection_watcher <- { :add_handler, :nodedown, f }
+    send :node_finder_connection_watcher, { :add_handler, :nodedown, f }
   end
 
   # Callbacks

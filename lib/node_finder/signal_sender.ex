@@ -9,7 +9,7 @@ defmodule NodeFinder.SignalSender do
   end
 
   def send do
-    :node_finder_signal_sender <- :send
+    send :node_finder_signal_sender, :send
     :ok
   end
 
