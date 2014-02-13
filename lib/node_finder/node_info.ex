@@ -6,9 +6,7 @@ defmodule NodeFinder.NodeInfo do
   end
 
   def decode(bin) do
-    state = :crypto.stream_init(:rc4, encryption_key)
-    { _state, plain_str } = :crypto.stream_decrypt(state, bin)
-    case plain_str do
+    case decrypt(bin) do
       <<"node_finder", now_seconds::64, node_str::binary>> ->
         if within_allowed_time_window(now_seconds) do
           { :ok, node_str }
