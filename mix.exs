@@ -5,7 +5,7 @@ defmodule NodeFinder.Mixfile do
     [
       app:     :node_finder,
       version: "0.0.1",
-      elixir:  "~> 0.12.0",
+      elixir:  ">= 0.12.0",
       deps:    deps,
     ]
   end
