@@ -1,7 +1,7 @@
 alias NodeFinder.NodeInfo, as: NodeInfo
 
 defmodule NodeFinder.SignalSender do
-  use GenServer.Behaviour
+  use GenServer
 
   # Public API
   def start_link do
