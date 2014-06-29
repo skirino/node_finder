@@ -6,6 +6,6 @@ defmodule NodeFinder.NodeInfoTest do
   test "encode and decode NodeInfo" do
     binary = NInfo.encode
     { :ok, node_str } = NInfo.decode(binary)
-    assert node_str == atom_to_binary(node)
+    assert node_str == Atom.to_string(node)
   end
 end

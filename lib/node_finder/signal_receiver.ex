@@ -28,7 +28,7 @@ defmodule NodeFinder.SignalReceiver do
 
   def handle_info({ :udp, _socket, _ip, _port, packet }, orig_socket) do
     { :ok, node_str } = NodeInfo.decode(packet)
-    connect_if_not_yet(binary_to_atom node_str)
+    connect_if_not_yet(String.to_atom(node_str))
     { :noreply, orig_socket }
   end
 

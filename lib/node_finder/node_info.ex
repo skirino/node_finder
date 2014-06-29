@@ -1,6 +1,6 @@
 defmodule NodeFinder.NodeInfo do
   def encode do
-    node_str = atom_to_binary(node)
+    node_str = Atom.to_string(node)
     message = "node_finder" <> <<now_seconds::64, node_str::binary>>
     encrypt(message)
   end
@@ -36,6 +36,6 @@ defmodule NodeFinder.NodeInfo do
     :crypto.stream_init(:rc4, encryption_key)
   end
   defp encryption_key do
-    atom_to_binary(Node.get_cookie) <> "3c7c4940b6"
+    Atom.to_string(Node.get_cookie) <> "3c7c4940b6"
   end
 end

@@ -12,7 +12,7 @@ defmodule NodeFinder do
   end
 
   defp override_env(key) do
-    maybe_value_str = System.get_env String.upcase(atom_to_binary(key))
+    maybe_value_str = System.get_env String.upcase(Atom.to_string(key))
     if maybe_value_str do
       { value, _ } = Code.eval_string(maybe_value_str)
       :application.set_env :node_finder, key, value
