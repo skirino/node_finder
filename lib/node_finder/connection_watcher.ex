@@ -15,7 +15,7 @@ defmodule NodeFinder.ConnectionWatcher do
 
   # Callbacks
   def init([]) do
-    :net_kernel.monitor_nodes(true, [node_type: :all])
+    :ok = :net_kernel.monitor_nodes(true, [node_type: :all])
     { :ok, [nodeup: [&nodeup_printer/1], nodedown: [&nodedown_printer/1]] }
   end
 
@@ -30,9 +30,9 @@ defmodule NodeFinder.ConnectionWatcher do
   end
 
   def nodeup_printer(node) do
-    :error_logger.info_msg "[#{__MODULE__}] nodeup: #{node}"
+    :error_logger.info_msg '[~s] nodeup: ~s', [__MODULE__, node]
   end
   def nodedown_printer(node) do
-    :error_logger.info_msg "[#{__MODULE__}] nodedown: #{node}"
+    :error_logger.info_msg '[~s] nodedown: ~s', [__MODULE__, node]
   end
 end

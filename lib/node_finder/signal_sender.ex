@@ -19,18 +19,18 @@ defmodule NodeFinder.SignalSender do
   end
 
   def handle_info(:send, old_timer) do
-    :erlang.cancel_timer(old_timer)
-    send_signal
+    _ = :erlang.cancel_timer(old_timer)
+    :ok = send_signal
     { :ok, millis } = :application.get_env :sending_interval_milliseconds
     { :noreply, :erlang.send_after(millis, self, :send) }
   end
 
   defp send_signal do
-    :error_logger.info_msg "[#{__MODULE__}] Number of connected nodes: #{Enum.count Node.list}. Sending node info..."
+    :error_logger.info_msg '[~s] Number of connected nodes: ~B. Broadcasting node info...', [__MODULE__, Enum.count(Node.list)]
     { :ok, addr } = :application.get_env :udp_multicast_address
     { :ok, port } = :application.get_env :udp_multicast_port
     { :ok, socket } = :gen_udp.open(0, [active: true, multicast_loop: true])
-    :gen_udp.send(socket, addr, port, NodeInfo.encode)
+    :ok = :gen_udp.send(socket, addr, port, NodeInfo.encode)
     :gen_udp.close(socket)
   end
 end
