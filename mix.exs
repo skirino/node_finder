@@ -5,7 +5,7 @@ defmodule NodeFinder.Mixfile do
     [
       app:     :node_finder,
       version: "0.0.1",
-      elixir:  ">= 0.12.0",
+      elixir:  ">= 1.0.0",
       deps:    deps,
     ]
   end
@@ -21,6 +21,7 @@ defmodule NodeFinder.Mixfile do
         udp_multicast_port:            60900,
         sending_interval_milliseconds: 5 * 60 * 1000,
       ],
+      applications: [:logger],
     ]
   end
 

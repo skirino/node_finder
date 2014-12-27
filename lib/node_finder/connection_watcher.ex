@@ -1,4 +1,5 @@
 defmodule NodeFinder.ConnectionWatcher do
+  require Logger
   use GenServer
 
   # Public API
@@ -30,9 +31,9 @@ defmodule NodeFinder.ConnectionWatcher do
   end
 
   def nodeup_printer(node) do
-    :error_logger.info_msg '[~s] nodeup: ~s', [__MODULE__, node]
+    Logger.info("[#{__MODULE__}] nodeup: #{node}")
   end
   def nodedown_printer(node) do
-    :error_logger.info_msg '[~s] nodedown: ~s', [__MODULE__, node]
+    Logger.info("[#{__MODULE__}] nodedown: #{node}")
   end
 end

@@ -1,6 +1,7 @@
 alias NodeFinder.NodeInfo, as: NodeInfo
 
 defmodule NodeFinder.SignalSender do
+  require Logger
   use GenServer
 
   # Public API
@@ -26,7 +27,7 @@ defmodule NodeFinder.SignalSender do
   end
 
   defp send_signal do
-    :error_logger.info_msg '[~s] Number of connected nodes: ~B. Broadcasting node info...', [__MODULE__, Enum.count(Node.list)]
+    Logger.info("[#{__MODULE__}] Number of connected nodes: #{Enum.count(Node.list)}. Broadcasting node info...")
     { :ok, addr } = :application.get_env :udp_multicast_address
     { :ok, port } = :application.get_env :udp_multicast_port
     { :ok, socket } = :gen_udp.open(0, [active: true, multicast_loop: true])
